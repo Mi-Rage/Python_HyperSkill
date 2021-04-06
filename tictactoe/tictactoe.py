@@ -70,11 +70,47 @@ def checking_status(source_field):
         return "Draw"
 
 
+def get_coordinates(source_field):
+    while True:
+        user_turn = input("Enter the coordinates: ").split()
+
+        is_not_digit = True
+        while is_not_digit:
+            for i in user_turn:
+                if not i.isdigit():
+                    is_not_digit = True
+                    print("You should enter numbers!")
+                    user_turn = input("Enter the coordinates: ").split()
+                    break
+                else:
+                    is_not_digit = False
+
+        user_coord = [int(c) for c in user_turn]
+
+        if len(user_coord) < 2:
+            print("Error! Need 2 coordinates!")
+        elif user_coord[0] not in range(1, 4) or user_coord[1] not in range(1, 4):
+            print("Coordinates should be from 1 to 3!")
+        elif source_field[user_coord[0]-1][user_coord[1]-1] != '_':
+            print("This cell is occupied! Choose another one!")
+        else:
+            return user_coord
+
+
+def update_field(coordinates, source_field):
+    row = coordinates[0] - 1
+    col = coordinates[1] - 1
+    source_field[row][col] = 'X'
+    return source_field
+
+
 def main():
     source = input("Enter cells: ")
     field = init_cells(source)
     print_field(field)
-    print(checking_status(field))
+    coordinates = get_coordinates(field)
+    field = update_field(coordinates, field)
+    print_field(field)
 
 
 if __name__ == '__main__':
