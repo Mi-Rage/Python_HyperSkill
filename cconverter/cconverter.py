@@ -1,9 +1,7 @@
 # write your code here!
-coins = int(input())
 source_currency = "conicoins"
 destination_currency = "dollars"
-rate = 100
+coins = int(input(f"Please, enter the number of {source_currency} you have: "))
+rate = float(input("Please, enter the exchange rate: "))
 exchange = coins * rate
-print(f"I have {coins} {source_currency}.")
-print(f"{coins} {source_currency} cost {exchange} {destination_currency}.")
-print("I am rich! Yippee!")
+print(f"The total amount of {destination_currency}: {exchange}")
