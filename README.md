@@ -11,7 +11,7 @@ https://hyperskill.org/projects/90?track=2
 Personal finances are an important part of life. Sometimes you need some extra money and decide to take a loan, or you want to buy a house using a mortgage. To make an informed decision, you need to be able to calculate different financial parameters. Let’s make a program that can help us with that!
 
 
-## Tic-Tac-Toe (toctactoe) Python project from HyperSkill. 
+## Tic-Tac-Toe (tictactoe) Python project from HyperSkill. 
 https://hyperskill.org/projects/73?track=2
 Everybody remembers this paper-and-pencil game from childhood: Tic-Tac-Toe, also known as Noughts and crosses or Xs and Os. A single mistake usually costs you the game, but thankfully it is simple enough that most players discover the best strategy quickly. Let’s program Tic-Tac-Toe and get playing!
 
