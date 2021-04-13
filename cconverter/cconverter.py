@@ -1,9 +1,11 @@
 # write your code here!
-source_currency = "conicoins"
-destination_currency = {'RUB': 2.98, 'ARS': 0.82, 'HNL': 0.17, 'AUD': 1.9622, 'MAD': 0.208}
+import requests
+import json
 
-coins = float(input())
-for key in destination_currency:
-    rate = round(coins * destination_currency[key], 2)
-    print(f"I will get {rate} {key} from the sale of {coins} conicoins.")
+currency = input().lower()
+url = f"http://www.floatrates.com/daily/{currency}.json"
+r = requests.get(url)
+value = json.loads(r.text)
+print(value['usd'])
+print(value['eur'])
 
