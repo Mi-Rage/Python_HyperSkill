@@ -22,3 +22,7 @@ Executing projects in a Python track from HyperSkill
 ## Coffee Machine (machine) Python project from HyperSkill. 
 - https://hyperskill.org/projects/68
 -  In this project, you will work on programming a coffee machine simulator. The machine works with typical products: coffee, milk, sugar, and plastic cups; if it runs out of something, it shows a notification. You can get three types of coffee: espresso, cappuccino, and latte. Since nothing’s for free, it also collects the money.
+
+## Duplicate File Handler (Duplicate File Handler) Python project from HyperSkill. 
+- https://hyperskill.org/projects/176
+- Duplicate File Handler is a useful tool that can free some space on your drive. Write a handler that checks and compares files in a folder, displays the result, and removes duplicates.
