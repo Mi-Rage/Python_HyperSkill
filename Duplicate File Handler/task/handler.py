@@ -107,15 +107,73 @@ def sized_output(dictionary, sort):
 
 
 def hashed_output(dictionary, sort):
+    result_dictionary = {}
     sorted_keys = sorted(dictionary.keys(), reverse=sort)
     count = 1
     for sizes in sorted_keys:
         print(sizes, 'bytes')
+        result_dictionary.update({sizes: {}})
         for hash_file in dictionary.get(sizes).keys():
             print('Hash:', hash_file)
             for file_path in dictionary.get(sizes).get(hash_file):
+                result_dictionary[sizes].update({count: file_path})
                 print(f"{count}. {file_path}")
                 count += 1
+    return result_dictionary
+
+
+def ask_delete_files(files_dictionary):
+    while True:
+        print("Delete files?")
+        option = input()
+        if option == 'yes':
+            delete_files(files_dictionary)
+            break
+        elif option == 'no':
+            break
+        else:
+            print("Wrong option")
+
+
+def delete_files(files_dictionary):
+    while True:
+        num_to_delete = get_num_to_delete()
+        if not check_delete_files(files_dictionary, num_to_delete):
+            print("Wrong format")
+        else:
+            break
+
+
+def get_num_to_delete():
+    while True:
+        not_correct = False
+        print("Enter file numbers to delete:")
+        result = input().split(" ")
+        for n in result:
+            if not n.isdigit():
+                print("Wrong format")
+                not_correct = True
+                break
+        if not_correct:
+            continue
+        else:
+            return result
+
+
+def check_delete_files(files_dictionary, num_to_delete):
+    total_space = 0
+    for to_del in num_to_delete:
+        found = False
+        for size in files_dictionary.keys():
+            for num in files_dictionary[size].keys():
+                if int(to_del) == num:
+                    found = True
+                    total_space += size
+                    os.remove(files_dictionary[size].get(num))
+        if not found:
+            return False
+    print(f"Total freed up space: {total_space} bytes")
+    return True
 
 
 req_dir = check_args()
@@ -125,6 +183,11 @@ sort_option = get_sort_option()
 double_sized_dict = get_double_sized()
 sized_output(double_sized_dict, sort_option)
 
+numbered_files = {}
 if get_check_duplicates():
     hashed_files_dict = get_hashed_dict(double_sized_dict)
-    hashed_output(hashed_files_dict, sort_option)
+    numbered_files = hashed_output(hashed_files_dict, sort_option)
+else:
+    exit(0)
+
+ask_delete_files(numbered_files)
