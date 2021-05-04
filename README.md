@@ -26,3 +26,7 @@ Executing projects in a Python track from HyperSkill
 ## Duplicate File Handler (Duplicate File Handler) Python project from HyperSkill. 
 - https://hyperskill.org/projects/176
 - Duplicate File Handler is a useful tool that can free some space on your drive. Write a handler that checks and compares files in a folder, displays the result, and removes duplicates.
+
+## Dominoes (dominoes) Python project from HyperSkill. 
+- https://hyperskill.org/projects/146
+- Take turns playing classic dominoes against your computer in a race to victory. Learn, how artificial intelligence can make use of simple statistics to make educated decisions. This project is all about basic concepts, put them to practice by making a fun little game.
