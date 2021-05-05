@@ -7,21 +7,14 @@ class Game:
         self.users = users
 
     def get_first_move(self):
-        doubles = []
-        for each_user in self.users:
-            doubles.append(each_user.get_max_double())
-
-        index_dbl = 0
-        max_double = 0
-        for dbl in doubles:
-            if len(dbl) > 0:
-                sum_double = dbl[0] * 2
-                if sum_double > max_double:
-                    max_double = sum_double
-                    index_dbl = doubles.index(dbl)
-        self.users[index_dbl].user_set.remove(doubles[index_dbl])
-        self.snake.append(doubles[index_dbl])
-        self.next_turn = self.users[(index_dbl + 1) % len(self.users)]
+        max_double = max(self.users[0].get_max_double(), self.users[1].get_max_double())
+        self.snake.append(max_double)
+        if max_double in self.users[0].user_set:
+            self.users[0].user_set.remove(max_double)
+            self.next_turn = self.users[1]
+        else:
+            self.users[1].user_set.remove(max_double)
+            self.next_turn = self.users[0]
 
     def print_snake(self):
         for piece in self.snake:
