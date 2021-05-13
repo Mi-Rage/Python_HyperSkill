@@ -32,5 +32,5 @@ Executing projects in a Python track from HyperSkill
 - Take turns playing classic dominoes against your computer in a race to victory. Learn, how artificial intelligence can make use of simple statistics to make educated decisions. This project is all about basic concepts, put them to practice by making a fun little game.
 
 ## Bill Splitter (Bill Splitter) Python project from HyperSkill.
-- Bill Splitter
+- https://hyperskill.org/projects/175
 - Everyone likes eating out with friends. The more friends, the better, but the bill time is always a bummer, to say the least. Why not develop a tool to keep the fun alive and make sure that everyone pays an equal amount.
