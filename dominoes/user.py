@@ -1,5 +1,3 @@
-import random
-
 class User:
 
     def __init__(self, user_name, stock):
@@ -20,27 +18,59 @@ class User:
 
     def get_human_turn(self, snake, stock):
         while True:
-            try:
-                turn = int(input())
-            except ValueError:
-                print("Invalid input. Please try again.")
-            else:
-                if abs(turn) > len(self.user_set):
+            while True:
+                try:
+                    turn = int(input())
+                except ValueError:
                     print("Invalid input. Please try again.")
                 else:
+                    if abs(turn) > len(self.user_set):
+                        print("Invalid input. Please try again.")
+                    else:
+                        break
+            if turn == 0:
+                self.user_set.append(stock.get_item())
+                break
+            else:
+                if not self.is_matches(snake, turn):
+                    print("Illegal move. Please try again.")
+                else:
                     break
-        if turn == 0:
-            self.user_set.append(stock.get_item())
-        elif turn < 0:
-            item = self.user_set.pop(abs(turn) - 1)
-            snake.insert(0, item)
-        else:
-            item = self.user_set.pop(abs(turn) - 1)
-            snake.append(item)
 
     def get_ai_turn(self, snake, stock):
         input()
-        item = random.choice(self.user_set)
-        self.user_set.remove(item)
-        snake.append(item)
+        for i in range(-len(self.user_set), 0):
+            if self.is_matches(snake, i):
+                return
 
+        for i in range(1, len(self.user_set) + 1):
+            if self.is_matches(snake, i):
+                return
+        self.user_set.append(stock.get_item())
+
+    def is_matches(self, snake, turn):
+        head_snake = snake[0][0]
+        tail_snake = snake[-1][-1]
+        item = self.user_set[abs(turn) - 1]
+        if turn < 0:
+            if item[-1] == head_snake:
+                self.user_set.remove(item)
+                snake.insert(0, item)
+                return True
+            elif item[0] == head_snake:
+                self.user_set.remove(item)
+                snake.insert(0, list(reversed(item)))
+                return True
+            else:
+                return False
+        elif turn > 0:
+            if item[0] == tail_snake:
+                self.user_set.remove(item)
+                snake.append(item)
+                return True
+            elif item[-1] == tail_snake:
+                self.user_set.remove(item)
+                snake.append(list(reversed(item)))
+                return True
+            else:
+                return False

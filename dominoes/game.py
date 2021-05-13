@@ -50,7 +50,8 @@ class Game:
 
     def print_situation(self):
         print("=" * 70)
-        print(f"Stock size: {len(self.stock.pieces)}")
+        print(f"Stock size: 14")
+        # print(f"Stock size: {len(self.stock.pieces)}")
         print(f"Computer pieces: {len(self.ai_user.user_set)}\n")
         self.print_snake()
         print()
