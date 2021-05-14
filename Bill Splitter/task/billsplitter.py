@@ -1,3 +1,5 @@
+import random
+
 friends_list = list()
 
 print("Enter the number of friends joining (including you)")
@@ -11,6 +13,14 @@ else:
         friends_list.append(input())
     print("Enter the total bill value:")
     total_bill = int(input())
+    print('Do you want to use the "Who is lucky?" feature? Write Yes/No:')
+    lucky_mode = True if input() == "Yes" else False
+    if lucky_mode:
+        lucky_friend = random.choice(friends_list)
+        print(f"{lucky_friend} is the lucky one!")
+    else:
+        print("No one is going to be lucky")
     each_bill = round(total_bill / num_of_people, 2)
     friends_dict = {name: each_bill for name in friends_list}
-    print(friends_dict)
+
+    # print(friends_dict)
