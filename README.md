@@ -34,3 +34,8 @@ Executing projects in a Python track from HyperSkill
 ## Bill Splitter (Bill Splitter) Python project from HyperSkill.
 - https://hyperskill.org/projects/175
 - Everyone likes eating out with friends. The more friends, the better, but the bill time is always a bummer, to say the least. Why not develop a tool to keep the fun alive and make sure that everyone pays an equal amount.
+
+
+## Simple Banking System (banking) Python project from HyperSkill. 
+-- https://hyperskill.org/projects/109
+-- Everything goes digital these days, and so does money. Today, most people have credit cards, which save us time, energy and nerves. From not having to carry a wallet full of cash to consumer protection, cards make our lives easier in many ways. In this project, you will develop a simple banking system with database.
