@@ -33,7 +33,6 @@ class Card:
                 item = item * 2
                 if item > 9:
                     item = item - 9
-            print(item)
             result += item
         if result % 10 != 0:
             self.check_sum = 10 - result % 10

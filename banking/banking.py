@@ -13,12 +13,13 @@ def create_account():
     ui.output_new_account(new_card)
 
 
-def get_balance(custom_card_number):
-    balance = storage.request_balance(custom_card_number)
+def get_balance():
+    balance = storage.request_balance()
     ui.output_balance(balance)
 
 
 def log_out():
+    storage.log_out()
     ui.output_log_out()
 
 
@@ -30,7 +31,7 @@ def log_in_account():
         while True:
             submenu_option = ui.get_option_account_menu()
             if submenu_option == 1:
-                get_balance(custom_card_number)
+                get_balance()
             elif submenu_option == 2:
                 log_out()
                 break
