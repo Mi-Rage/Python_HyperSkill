@@ -18,6 +18,35 @@ def get_balance():
     ui.output_balance(balance)
 
 
+def add_income():
+    income = ui.ask_income()
+    balance = storage.request_balance()
+    storage.add_income_to_account(balance + income)
+    ui.output_income_complete()
+
+
+def do_transfer():
+    dest_card_number = ui.ask_dest_card_number()
+    if card.is_correct(dest_card_number):
+        destination_id = storage.is_card_exist(dest_card_number)
+        if destination_id is not None:
+            money_to_transfer = ui.ask_money_to_transfer()
+            if storage.is_enough_money(money_to_transfer):
+                storage.do_transfer(destination_id, money_to_transfer)
+                ui.output_succes_transfer()
+            else:
+                ui.output_not_enough_money()
+        else:
+            ui.output_card_not_exist()
+    else:
+        ui.output_number_mistake()
+
+
+def close_account():
+    storage.delete_account()
+    ui.output_delete_account()
+
+
 def log_out():
     storage.log_out()
     ui.output_log_out()
@@ -33,6 +62,13 @@ def log_in_account():
             if submenu_option == 1:
                 get_balance()
             elif submenu_option == 2:
+                add_income()
+            elif submenu_option == 3:
+                do_transfer()
+            elif submenu_option == 4:
+                close_account()
+                break
+            elif submenu_option == 5:
                 log_out()
                 break
             elif submenu_option == 0:
