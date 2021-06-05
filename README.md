@@ -39,3 +39,8 @@ Executing projects in a Python track from HyperSkill
 ## Simple Banking System (banking) Python project from HyperSkill. 
 - https://hyperskill.org/projects/109
 - Everything goes digital these days, and so does money. Today, most people have credit cards, which save us time, energy and nerves. From not having to carry a wallet full of cash to consumer protection, cards make our lives easier in many ways. In this project, you will develop a simple banking system with database.
+
+
+## Password Hacker (hacking) Python project from HyperSkill.
+- https://hyperskill.org/projects/80
+- You must connect to a secret server without knowing the password. Your task is to write a Python program that can hack this password, and do so in the quickest way possible.
