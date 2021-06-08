@@ -2,6 +2,7 @@ import argparse
 import itertools
 import socket
 
+
 #
 # ██████╗░░█████╗░░██████╗░██████╗░██╗░░░░░░░██╗░█████╗░██████╗░██████╗░      ██╗░░██╗░█████╗░░█████╗░██╗░░██╗███████╗██████╗░
 # ██╔══██╗██╔══██╗██╔════╝██╔════╝░██║░░██╗░░██║██╔══██╗██╔══██╗██╔══██╗      ██║░░██║██╔══██╗██╔══██╗██║░██╔╝██╔════╝██╔══██╗
@@ -12,15 +13,15 @@ import socket
 
 
 def get_pass():
-    numbers = [chr(i) for i in range(48, 58)]
-    letters = [chr(i) for i in range(97, 123)]
-    size = 1
-    while True:
-        my_iter = itertools.product(itertools.chain(numbers, letters), repeat=size)
-
-        for i in my_iter:
-            yield "".join(i)
-        size += 1
+    with open('passwords.txt') as pass_file:
+        for line in pass_file:
+            word = line.rstrip()
+            if word.isdigit():
+                yield word
+            else:
+                word_combinations = itertools.product(*([letter.lower(), letter.upper()] for letter in word))
+                for word in word_combinations:
+                    yield ''.join(word)
 
 
 parser = argparse.ArgumentParser()
