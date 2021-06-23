@@ -44,3 +44,8 @@ Executing projects in a Python track from HyperSkill
 ## Password Hacker (hacking) Python project from HyperSkill.
 - https://hyperskill.org/projects/80
 - You must connect to a secret server without knowing the password. Your task is to write a Python program that can hack this password, and do so in the quickest way possible.
+
+
+## Web Scraper (Web Scraper) Python project from HyperSkill.
+- https://hyperskill.org/projects/145
+- You will create a function that takes a website address and a number of webpages as input arguments and then goes all over the website saving every news article on the page to a separate .txt file on your computer.
