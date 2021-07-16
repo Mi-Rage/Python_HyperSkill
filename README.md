@@ -49,3 +49,7 @@ Executing projects in a Python track from HyperSkill
 ## Web Scraper (Web Scraper) Python project from HyperSkill.
 - https://hyperskill.org/projects/145
 - You will create a function that takes a website address and a number of webpages as input arguments and then goes all over the website saving every news article on the page to a separate .txt file on your computer.
+
+## Food Blog Backend (Food Blog Backend) Python project from HyperSkill.
+- https://hyperskill.org/projects/167
+- You will create a simple backend that will allow you to populate an SQLite3 database. You will know how to deal with the primary key auto-increment and how to use foreign keys to create relationships between the tables. Learn how to deal with many-to-many relations. Work with SQL queries and database cursor methods.
