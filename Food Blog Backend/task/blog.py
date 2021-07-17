@@ -14,14 +14,17 @@ def main():
     data_base = database.Storage(str(args[1]))
     fill_recipes(data_base, ui)
 
-    
+
 def fill_recipes(data_base, ui):
     while True:
         recipe_name = ui.get_recipe_name()
         if len(recipe_name) > 0:
             recipe_desc = ui.get_recipe_description()
-            data_base.save_recipe(recipe_name, recipe_desc)
-            data_base.print_table("recipes")
+            recipe_id = data_base.save_recipe(recipe_name, recipe_desc)
+            periods = data_base.get_data_from_table('meals')
+            selected_periods = ui.get_when_can_served(periods)
+            data_base.save_serve(selected_periods, recipe_id)
+            data_base.print_table("serve")
         else:
             break
 
