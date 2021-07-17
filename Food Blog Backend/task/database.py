@@ -23,11 +23,18 @@ class Storage:
     def create_table(self):
         cur = self.conn.cursor()
         cur.execute(
-            'CREATE TABLE IF NOT EXISTS meals (meal_id INTEGER PRIMARY KEY AUTOINCREMENT, meal_name TEXT UNIQUE NOT NULL);')
+            '''CREATE TABLE IF NOT EXISTS meals 
+            (meal_id INTEGER PRIMARY KEY AUTOINCREMENT, meal_name TEXT UNIQUE NOT NULL);''')
         cur.execute(
-            'CREATE TABLE IF NOT EXISTS ingredients (ingredient_id INTEGER PRIMARY KEY AUTOINCREMENT, ingredient_name TEXT NOT NULL UNIQUE);')
+            '''CREATE TABLE IF NOT EXISTS ingredients 
+            (ingredient_id INTEGER PRIMARY KEY AUTOINCREMENT, ingredient_name TEXT NOT NULL UNIQUE);''')
         cur.execute(
-            'CREATE TABLE IF NOT EXISTS measures (measure_id INTEGER PRIMARY KEY AUTOINCREMENT, measure_name TEXT UNIQUE);')
+            '''CREATE TABLE IF NOT EXISTS measures 
+            (measure_id INTEGER PRIMARY KEY AUTOINCREMENT, measure_name TEXT UNIQUE);''')
+        self.conn.commit()
+        cur.execute(
+            '''CREATE TABLE IF NOT EXISTS recipes 
+            (recipe_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name TEXT UNIQUE NOT NULL, recipe_description TEXT);''')
         self.conn.commit()
 
     def fill_table(self):
@@ -40,10 +47,18 @@ class Storage:
         cur.execute(request)
         self.conn.commit()
 
-    def print_table(self):
+    def save_recipe(self,recipe_name, recipe_desc):
         self.conn = sqlite3.connect(self.db_file_name)
         cur = self.conn.cursor()
-        request = f'SELECT * FROM meals;'
+        request = f'INSERT INTO recipes (recipe_name, recipe_description) VALUES ("{recipe_name}", "{recipe_desc}");'
+        cur.execute(request)
+        self.conn.commit()
+        self.conn.close()
+
+    def print_table(self, table_name):
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        request = f'SELECT * FROM {table_name};'
         cur.execute(request)
         result = cur.fetchall()
         if result is None:
