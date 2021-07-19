@@ -24,7 +24,26 @@ def fill_recipes(data_base, ui):
             periods = data_base.get_data_from_table('meals')
             selected_periods = ui.get_when_can_served(periods)
             data_base.save_serve(selected_periods, recipe_id)
-            data_base.print_table("serve")
+            while True:
+                input_quantity = input("Input quantity of ingredient <press enter to stop>:").split(" ")
+                if len(input_quantity) == 3:
+                    quantity = input_quantity[0]
+                    measure_id = data_base.get_id_from_table('measures', input_quantity[1])
+                    ingredient_id = data_base.get_id_from_table('ingredients', input_quantity[2])
+                elif len(input_quantity) == 2:
+                    quantity = input_quantity[0]
+                    measure_id = data_base.get_id_from_table('measures', "")
+                    ingredient_id = data_base.get_id_from_table('ingredients', input_quantity[1])
+                else:
+                    break
+                if measure_id is not None:
+                    if ingredient_id is not None:
+                        data_base.save_quantity(quantity, recipe_id, measure_id, ingredient_id)
+                    else:
+                        print("The ingredient is not conclusive!")
+                else:
+                    print("The measure is not conclusive!")
+                data_base.print_table("quantity")
         else:
             break
 

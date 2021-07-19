@@ -25,22 +25,50 @@ class Storage:
         cur.execute('PRAGMA foreign_keys = ON;')
         cur.execute(
             '''CREATE TABLE IF NOT EXISTS meals 
-            (meal_id INTEGER PRIMARY KEY AUTOINCREMENT, meal_name TEXT UNIQUE NOT NULL);''')
+            (
+            meal_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            meal_name TEXT UNIQUE NOT NULL
+            );''')
         cur.execute(
             '''CREATE TABLE IF NOT EXISTS ingredients 
-            (ingredient_id INTEGER PRIMARY KEY AUTOINCREMENT, ingredient_name TEXT NOT NULL UNIQUE);''')
+            (ingredient_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            ingredient_name TEXT NOT NULL UNIQUE
+            );''')
         cur.execute(
             '''CREATE TABLE IF NOT EXISTS measures 
-            (measure_id INTEGER PRIMARY KEY AUTOINCREMENT, measure_name TEXT UNIQUE);''')
+            (
+            measure_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            measure_name TEXT UNIQUE
+            );''')
         self.conn.commit()
         cur.execute(
             '''CREATE TABLE IF NOT EXISTS recipes 
-            (recipe_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name TEXT NOT NULL, recipe_description TEXT);''')
+            (
+            recipe_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            recipe_name TEXT NOT NULL, 
+            recipe_description TEXT
+            );''')
         cur.execute(
             '''CREATE TABLE IF NOT EXISTS serve
-            (serve_id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_id INTEGER NOT NULL, meal_id INTEGER NOT NULL,
+            (
+            serve_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            recipe_id INTEGER NOT NULL, 
+            meal_id INTEGER NOT NULL,
             FOREIGN KEY(recipe_id) REFERENCES recipes(recipe_id),
-            FOREIGN KEY(meal_id) REFERENCES meals(meal_id));''')
+            FOREIGN KEY(meal_id) REFERENCES meals(meal_id)
+            );''')
+        cur.execute(
+            '''CREATE TABLE IF NOT EXISTS quantity
+            (
+            quantity_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+            measure_id INTEGER NOT NULL, 
+            ingredient_id INTEGER NOT NULL,
+            quantity INTEGER NOT NULL, 
+            recipe_id INTEGER NOT NULL, 
+            FOREIGN KEY(measure_id) REFERENCES measures (measure_id),
+            FOREIGN KEY(ingredient_id) REFERENCES ingredients (ingredient_id), 
+            FOREIGN KEY(recipe_id) REFERENCES recipes (recipe_id)
+            );''')
         self.conn.commit()
 
     def fill_table(self):
@@ -85,5 +113,32 @@ class Storage:
         for item in selected_periods:
             request = f'INSERT INTO serve (meal_id, recipe_id) VALUES ({int(item)}, {int(recipe_id)});'
             cur.execute(request)
+        self.conn.commit()
+        self.conn.close()
+
+    def get_measure_id(self, value):
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        request = f'SELECT measure_id FROM measures WHERE measure_name = "{value}";'
+        cur.execute(request)
+        result = cur.fetchone()
+        result = result[0] if result is not None else None
+        return result
+
+    def get_id_from_table(self, table_name, value):
+        ingredients = self.get_data_from_table(table_name)
+        count = 0
+        result = None
+        for item in ingredients:
+            if value in item[1]:
+                count += 1
+                result = item[0]
+        return result if count == 1 else None
+
+    def save_quantity(self, quantity, recipe_id, measure_id, ingredient_id):
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        request = f'INSERT INTO quantity (quantity, recipe_id, measure_id, ingredient_id) VALUES ({quantity}, {recipe_id}, {measure_id}, {ingredient_id});'
+        cur.execute(request)
         self.conn.commit()
         self.conn.close()
