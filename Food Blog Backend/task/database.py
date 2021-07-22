@@ -142,3 +142,112 @@ class Storage:
         cur.execute(request)
         self.conn.commit()
         self.conn.close()
+
+    def get_list_id_from_table_meal(self, values):
+        id_list = []
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        for v in values:
+            request = f'SELECT meal_id FROM meals WHERE meal_name="{v}";'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchone()
+            id_list.append(result[0])
+        self.conn.close()
+        return id_list
+
+    def get_list_id_from_table_ing(self, values):
+        id_list = []
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        for v in values:
+
+            request = f'SELECT ingredient_id FROM ingredients WHERE ingredient_name="{v}";'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchone()
+            if result is not None:
+                id_list.append(result[0])
+            else:
+                id_list.append(99)
+        self.conn.close()
+        return id_list
+
+    def get_recipe_id_list(self, values):
+        id_list = []
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        for v in values:
+            request = f'SELECT recipe_id FROM quantity WHERE ingredient_id={v};'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchall()
+            id_list.append(result)
+            print("recipe_res ", result)
+        self.conn.close()
+        result_list = []
+        found = None
+        for item in id_list[0]:
+            for i in range(len(id_list)-1):
+                if item not in id_list[i+1]:
+                    found = None
+                    break
+                else:
+                    found = item[0]
+            if found is not None:
+                result_list.append(found)
+                found = None
+        print(result_list)
+        return result_list
+
+    def get_name_from_recipe(self, values):
+        id_list = []
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        for v in values:
+            request = f'SELECT recipe_name FROM recipes WHERE recipe_id="{v}";'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchone()
+            id_list.append(result[0])
+        self.conn.close()
+        return id_list
+
+    def get_recipe_in_serve(self, meals_id, ingr_id):
+        self.conn = sqlite3.connect(self.db_file_name)
+        cur = self.conn.cursor()
+        recipe_list = []
+        for v in meals_id:
+            request = f'SELECT recipe_id FROM serve WHERE meal_id={v};'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchall()
+            recipe_list.append([r[0] for r in result])
+        rec_set = set()
+        for r in recipe_list:
+            for item in r:
+                rec_set.add(item)
+        print("reipe_is_list_from_serve",recipe_list)
+        print("reipe_set",rec_set)
+        ing_list = dict()
+        cur = self.conn.cursor()
+        for v in rec_set:
+            request = f'SELECT ingredient_id FROM quantity WHERE recipe_id={v};'
+            cur.execute(request)
+            self.conn.commit()
+            result = cur.fetchall()
+            ing_list[v]=[r[0] for r in result]
+        print("new_rec_list", ing_list)
+        found_reciep_list = []
+        found = None
+        for k in ing_list.keys():
+            for v in ingr_id:
+                if v not in ing_list.get(k):
+                    found = None
+                    break
+                else:
+                    found = k
+            if found is not None:
+                found_reciep_list.append(found)
+        print("id рецептов", found_reciep_list)
+        return found_reciep_list

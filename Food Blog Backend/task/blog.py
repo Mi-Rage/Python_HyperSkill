@@ -1,18 +1,36 @@
 import sys
 import database
 import user_interface
+import argparse
 
 
 def main():
-    args = sys.argv
+    parser = argparse.ArgumentParser()
+    parser.add_argument("db_file_name", default=None)
+    parser.add_argument("-i", "--ingredients", default=None)
+    parser.add_argument("-m", "--meals", default=None)
 
-    if len(args) != 2:
+    args = parser.parse_args()
+    if args.db_file_name is None:
         print("The script should be called with file name argument!")
         sys.exit(-1)
+    else:
+        db_file = args.db_file_name
+
+    ingredients = args.ingredients.split(',') if args.ingredients is not None else None
+    meals = args.meals.split(',') if args.ingredients is not None else None
+
+    print(ingredients)
+    print(meals)
 
     ui = user_interface.Uinterface()
-    data_base = database.Storage(str(args[1]))
-    fill_recipes(data_base, ui)
+    data_base = database.Storage(db_file)
+
+    if ingredients is None and meals is None:
+        fill_recipes(data_base, ui)
+    else:
+        print("DO THERE")
+        get_selected(data_base, ui, ingredients, meals)
 
 
 def fill_recipes(data_base, ui):
@@ -32,7 +50,8 @@ def fill_recipes(data_base, ui):
                     ingredient_id = data_base.get_id_from_table('ingredients', input_quantity[2])
                 elif len(input_quantity) == 2:
                     quantity = input_quantity[0]
-                    measure_id = data_base.get_id_from_table('measures', "")
+                    measure_id = 8
+                    # measure_id = data_base.get_id_from_table('measures', "")
                     ingredient_id = data_base.get_id_from_table('ingredients', input_quantity[1])
                 else:
                     break
@@ -47,6 +66,20 @@ def fill_recipes(data_base, ui):
         else:
             break
 
+
+def get_selected(data_base, ui, ingredients, meals):
+    print(meals)
+    meals_id = data_base.get_list_id_from_table_meal(meals)
+    print(meals_id)
+    print(ingredients)
+    ingr_id = data_base.get_list_id_from_table_ing(ingredients)
+    print(ingr_id)
+    recipe_in_serve = data_base.get_recipe_in_serve(meals_id, ingr_id)
+    if len(recipe_in_serve) > 0:
+        recipe_name = data_base.get_name_from_recipe(recipe_in_serve)
+        print(", ".join(recipe_name))
+    else:
+        print("There are no such recipes in the database.")
 
 if __name__ == "__main__":
     main()
